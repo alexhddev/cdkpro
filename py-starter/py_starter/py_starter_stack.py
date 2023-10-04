@@ -1,7 +1,8 @@
 from aws_cdk import (
-    # Duration,
     Stack,
-    # aws_sqs as sqs,
+    aws_s3 as s3,
+    Duration
+
 )
 from constructs import Construct
 
@@ -10,10 +11,10 @@ class PyStarterStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        # The code that defines your stack goes here
+        s3.Bucket(self, "PyBucket", lifecycle_rules=[
+            s3.LifecycleRule(
+                expiration=Duration.days(3)
+            )
+        ])
 
-        # example resource
-        # queue = sqs.Queue(
-        #     self, "PyStarterQueue",
-        #     visibility_timeout=Duration.seconds(300),
-        # )
+
