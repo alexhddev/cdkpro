@@ -6,7 +6,7 @@ export class TsStarterStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    new aws_s3.Bucket(this, 'TsBucket', {
+    const bucket = new aws_s3.Bucket(this, 'TsBucket', {
       lifecycleRules: [
         {
           expiration: cdk.Duration.days(3)
@@ -14,5 +14,11 @@ export class TsStarterStack extends cdk.Stack {
       ]
     })
 
+    new cdk.CfnOutput(this,
+      'TsBucketName', {
+        value: bucket.bucketName
+      }
+      )
   }
+
 }
