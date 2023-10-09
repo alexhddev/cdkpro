@@ -14,7 +14,7 @@ class PyStarterStack(Stack):
 
         suffix = self.__initialize_suffix()
 
-        bucket = s3.Bucket(self, "PyBucket",
+        self.bucket = s3.Bucket(self, "PyBucket",
             bucket_name=f"cool-bucket-{suffix}",
             lifecycle_rules=[
             s3.LifecycleRule(
@@ -23,10 +23,14 @@ class PyStarterStack(Stack):
         ])
 
         CfnOutput(self, "PyBucketName", 
-                  value=bucket.bucket_name
+                  value=self.bucket.bucket_name
                   )
 
     def __initialize_suffix(self):
         short_stack_id = Fn.select(2, Fn.split('/', self.stack_id))
         suffix = Fn.select(4, Fn.split('-', short_stack_id))
         return suffix
+
+    @property
+    def cool_bucket(self):
+        return self.bucket
