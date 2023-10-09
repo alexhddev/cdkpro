@@ -3,12 +3,15 @@ import { Construct } from 'constructs';
 import { aws_s3, Fn } from 'aws-cdk-lib'
 
 export class TsStarterStack extends cdk.Stack {
+
+  public coolBucket: aws_s3.Bucket;
+
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     const suffix = this.initializeSuffix();
 
-    const bucket = new aws_s3.Bucket(this, 'TsBucket', {
+    this.coolBucket = new aws_s3.Bucket(this, 'TsBucket', {
       bucketName: `cool-bucket-${suffix}`,
       lifecycleRules: [
         {
@@ -19,7 +22,7 @@ export class TsStarterStack extends cdk.Stack {
 
     new cdk.CfnOutput(this,
       'TsBucketName', {
-        value: bucket.bucketName
+        value: this.coolBucket.bucketName
       }
       )
   }
