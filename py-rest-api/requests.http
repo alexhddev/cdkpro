@@ -1,6 +1,6 @@
 @url = https://covr3k2a3h.execute-api.eu-west-1.amazonaws.com/prod/
 
-GET {{url}}/empl?id=asdfsdff39002c-6ac5-44f7-9f89-7f29eabd2bd4
+GET {{url}}/empl?id=af39002c-6ac5-44f7-9f89-7f29eabd2bd4
 ###
 
 POST {{url}}/empl
