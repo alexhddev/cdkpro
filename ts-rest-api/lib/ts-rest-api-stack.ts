@@ -1,16 +1,28 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { join } from 'path';
+import { LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
 
 export class TsRestApiStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
+    const emplLambda = new NodejsFunction(this, 'Ts-EmplLambda', {
+      runtime: Runtime.NODEJS_18_X,
+      handler: 'handler',
+      entry: (join(__dirname, '..', 'services', 'handler.ts')),
+    })
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'TsRestApiQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    const api = new RestApi(this, 'TS-EmplApi');
+    const emplResource = api.root.addResource('empl');
+
+    const emplLambdaIntegration = new LambdaIntegration(emplLambda);
+
+    emplResource.addMethod('GET', emplLambdaIntegration);
+    emplResource.addMethod('POST', emplLambdaIntegration);
+
+
   }
 }
