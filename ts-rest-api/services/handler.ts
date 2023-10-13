@@ -26,6 +26,12 @@ async function handler(event: APIGatewayProxyEvent, context: Context): Promise<A
             body: JSON.stringify(error.message)
         }
     }
+
+    response.headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': '*'
+    }
+
     return response;
 }
 

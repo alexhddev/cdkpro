@@ -3,7 +3,7 @@ import { Construct } from 'constructs';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { join } from 'path';
-import { LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { Cors, LambdaIntegration, ResourceOptions, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { AttributeType, Billing, TableV2 } from 'aws-cdk-lib/aws-dynamodb';
 
 export class TsRestApiStack extends cdk.Stack {
@@ -30,7 +30,14 @@ export class TsRestApiStack extends cdk.Stack {
     employeesTable.grantReadWriteData(emplLambda);
 
     const api = new RestApi(this, 'TS-EmplApi');
-    const emplResource = api.root.addResource('empl');
+
+    const optionsWithCors: ResourceOptions = {
+      defaultCorsPreflightOptions: {
+          allowOrigins: Cors.ALL_ORIGINS,
+          allowMethods: Cors.ALL_METHODS
+      }
+  }
+    const emplResource = api.root.addResource('empl', optionsWithCors);
 
     const emplLambdaIntegration = new LambdaIntegration(emplLambda);
 
