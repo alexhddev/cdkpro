@@ -47,3 +47,22 @@ class PyCwMetricsStack(Stack):
         topic_action = aws_cloudwatch_actions.SnsAction(alarm_topic)
         alarm.add_alarm_action(topic_action)
         alarm.add_ok_action(topic_action)
+
+        api_alarm = aws_cloudwatch.Alarm(
+            self,
+            "Py-Api4xxAlarm",
+            metric=aws_cloudwatch.Metric(
+                metric_name="4XXError",
+                namespace="AWS/ApiGateway",
+                period=Duration.minutes(1),
+                statistic="Sum",
+                dimensions_map={
+                    "ApiName":"TS-EmplApi"
+                }
+            ),
+            evaluation_periods=1,
+            threshold=100,
+        )
+
+        api_alarm.add_alarm_action(topic_action)
+        api_alarm.add_ok_action(topic_action)

@@ -40,5 +40,22 @@ export class TsCwMetricsStack extends cdk.Stack {
   sampleAlarm.addAlarmAction(topicAction);
   sampleAlarm.addOkAction(topicAction);
 
+  const apiAlarm = new Alarm(this, 'Ts-Api4xxAlarm', {
+    metric: new Metric({
+        metricName: '4XXError',
+        namespace: 'AWS/ApiGateway',
+        period: cdk.Duration.minutes(1),
+        statistic: 'Sum',
+        dimensionsMap: {
+          "ApiName": "TS-EmplApi"
+        }
+    }),
+    evaluationPeriods: 1,
+    threshold: 1,
+});
+
+apiAlarm.addAlarmAction(topicAction);
+apiAlarm.addOkAction(topicAction);
+
   }
 }
