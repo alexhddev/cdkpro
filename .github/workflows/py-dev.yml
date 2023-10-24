@@ -1,0 +1,44 @@
+name: python cdk deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: install web app dependencies
+      working-directory: ./web
+      run: npm ci
+
+    - name: build web app
+      working-directory: ./web
+      run: npm run build
+
+    - name: install AWS CDK
+      run: sudo npm i -g aws-cdk
+
+    - name: install deployment dependencies
+      working-directory: ./py-webdepl
+      run: pip3 install -r requirements.txt
+
+    - name: cdk synth
+      working-directory: ./py-webdepl
+      run: cdk synth
+
+    - name: cdk deploy
+      working-directory: ./py-webdepl
+      env: 
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+      run: cdk deploy
