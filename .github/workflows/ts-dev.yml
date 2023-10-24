@@ -2,7 +2,7 @@ name: typescript cdk deploy
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "mainz" ]
 
 jobs:
   build:
