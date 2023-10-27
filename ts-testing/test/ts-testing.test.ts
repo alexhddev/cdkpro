@@ -65,8 +65,12 @@ describe('TsSimpleStack test suite', () => {
     expect(lambdaActionsCapture.asArray()).toEqual(
       expect.arrayContaining(expectedActions)
     )
-
   });
+
+  test('Bucket properties with snapshot', ()=>{
+    const bucketTemplate = template.findResources("AWS::S3::Bucket");
+    expect(bucketTemplate).toMatchSnapshot()
+})
 
 
 
