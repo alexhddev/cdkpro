@@ -66,3 +66,7 @@ def test_lambda_actions_with_captors(simple_template):
        ]
     
     assert sorted(lambda_actions_captor.as_array()) == sorted(expected_actions)
+
+def test_bucket_props_with_snapshot(simple_template, snapshot):
+    bucket_template = simple_template.find_resources("AWS::S3::Bucket")
+    assert bucket_template ==snapshot

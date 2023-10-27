@@ -1,0 +1,15 @@
+# serializer version: 1
+# name: test_bucket_props_with_snapshot
+  dict({
+    'SimpleBucket250AC437': dict({
+      'DeletionPolicy': 'Retain',
+      'Properties': dict({
+        'VersioningConfiguration': dict({
+          'Status': 'Enabled',
+        }),
+      }),
+      'Type': 'AWS::S3::Bucket',
+      'UpdateReplacePolicy': 'Retain',
+    }),
+  })
+# ---
