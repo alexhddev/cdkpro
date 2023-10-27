@@ -1,5 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
-import { Template, Match } from 'aws-cdk-lib/assertions';
+import { Template, Match, Capture } from 'aws-cdk-lib/assertions';
 import * as TsTesting from '../lib/ts-testing-stack';
 
 describe('TsSimpleStack test suite', () => {
@@ -43,6 +43,29 @@ describe('TsSimpleStack test suite', () => {
         }
       })
     );
+  });
+
+  test('Lambda actions, with capture', () => {
+    const lambdaActionsCapture = new Capture();
+
+    template.hasResourceProperties('AWS::IAM::Policy', {
+      PolicyDocument: {
+        Statement: [{
+          Action: lambdaActionsCapture
+        }]
+      }
+    })
+
+    const expectedActions = [
+      "s3:GetObject*",
+      "s3:GetBucket*",
+      "s3:List*"
+    ]
+
+    expect(lambdaActionsCapture.asArray()).toEqual(
+      expect.arrayContaining(expectedActions)
+    )
+
   });
 
 
