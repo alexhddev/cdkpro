@@ -1,7 +1,7 @@
 from aws_cdk import (
-    # Duration,
     Stack,
-    # aws_sqs as sqs,
+    aws_lambda,
+    aws_s3    
 )
 from constructs import Construct
 
@@ -10,10 +10,13 @@ class PyOthersStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        # The code that defines your stack goes here
+        cool_lambda = aws_lambda.Function(self, 'SimpleLambda',
+            runtime=aws_lambda.Runtime.PYTHON_3_11,
+            handler='index.handler',
+            code=aws_lambda.Code.from_inline('print()')
+        )
+        bucket = aws_s3.Bucket(self, 'SimpleBucket',
+            versioned=True
+        )
+        bucket.grant_read(cool_lambda)
 
-        # example resource
-        # queue = sqs.Queue(
-        #     self, "PyOthersQueue",
-        #     visibility_timeout=Duration.seconds(300),
-        # )
